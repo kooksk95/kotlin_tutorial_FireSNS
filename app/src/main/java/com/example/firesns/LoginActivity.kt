@@ -24,6 +24,7 @@ class LoginActivity : AppCompatActivity() {
             val password = et_password.text.toString()
             if(email.isBlank() || password.isBlank()){
                 Toast.makeText(this, "이메일과 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
+                btn_login.isEnabled = true
                 return@setOnClickListener
             }
 
