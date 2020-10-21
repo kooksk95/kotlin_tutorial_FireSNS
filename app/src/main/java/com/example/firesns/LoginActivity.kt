@@ -13,6 +13,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
         val auth = FirebaseAuth.getInstance() // 유저 credential 확인하는 객체
         if(auth.currentUser != null) {
             goFeedActivity()
