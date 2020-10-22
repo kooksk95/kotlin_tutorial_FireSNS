@@ -6,20 +6,31 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.firesns.models.Post
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.Query
+import kotlinx.android.synthetic.main.activity_feed.*
 import java.sql.Timestamp
 
 private const val TAG = "FeedActivity"
 class FeedActivity : AppCompatActivity() {
 
     private lateinit var firestoreDb: FirebaseFirestore
+    private lateinit var posts: MutableList<Post>
+    private lateinit var adaptor: PostAdaptor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_feed)
+
+        posts = mutableListOf() // 1. data source
+        adaptor = PostAdaptor(this, posts)
+
+        // 2. adaptor - layout manager를 RecyclerView에 바인딩
+        rvPost.adapter = adaptor
+        rvPost.layoutManager = LinearLayoutManager(this)
 
         firestoreDb = FirebaseFirestore.getInstance()
 //        val settings = FirebaseFirestoreSettings.Builder()
@@ -41,6 +52,9 @@ class FeedActivity : AppCompatActivity() {
                 return@addSnapshotListener
             }
             var postList = snapshot.toObjects(Post::class.java)
+            posts.clear()
+            posts.addAll(postList)
+            adaptor.notifyDataSetChanged()
             for(post in postList){
                 Log.i(TAG, "Post $post")
             }
